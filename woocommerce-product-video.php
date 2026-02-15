@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: WooCommerce Product Video
- * Plugin URI:  https://example.com
+ * Plugin URI:  https://daneykoster.nl
  * Description: Voegt product video's toe aan de WooCommerce product gallery.
  * Version:     1.1.2
  * Author:      Daney Koster
