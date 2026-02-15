@@ -2,46 +2,44 @@ jQuery(document).ready(function ($) {
     // Wait for the window to load to ensure Bricks slider is initialized
     $(window).on('load', function () {
         const $bricksSlider = $('.brx-product-gallery-thumbnail-slider');
+        const $mainGallery = $('.woocommerce-product-gallery'); // Main gallery wrapper
         const $videoSlides = $('.woocommerce-product-gallery__image.wcpv-video-slide');
 
         if ($bricksSlider.length && $videoSlides.length) {
-            const $wrapper = $bricksSlider.find('.brx-thumbnail-slider-wrapper'); // Or the correct internal wrapper
+            const $wrapper = $bricksSlider.find('.brx-thumbnail-slider-wrapper');
 
-            // Check if we found the wrapper, sometimes it might be just the slider itself if not initialized yet,
-            // but on window load it should be.
-            // Bricks 1.9+ might use Splide or Swiper, earlier versions used FlexSlider.
-            // The HTML provided shows a structure typical of FlexSlider or a custom implementation with .flex-viewport
+            // Find ALL slides in the main gallery to determine correct indices
+            const $allSlides = $mainGallery.find('.woocommerce-product-gallery__wrapper .woocommerce-product-gallery__image');
 
-            $videoSlides.each(function (index) {
+            $videoSlides.each(function () {
                 const $slide = $(this);
-                const thumbUrl = $slide.data('thumb') || ''; // Use data-thumb if available
+                const thumbUrl = $slide.data('thumb') || '';
 
-                // Create the thumbnail element
-                // We need to match the structure of existing thumbnails
-                // <div class="woocommerce-product-gallery__image" ... ><img ... ></div>
+                // Calculate the index of this video slide among ALL slides
+                const slideIndex = $allSlides.index($slide);
 
                 if (thumbUrl) {
-                    const $newThumb = $('<div class="woocommerce-product-gallery__image" style="float: left; display: block;">' +
+                    const $newThumb = $('<div class="woocommerce-product-gallery__image" style="float: left; display: block; cursor: pointer;">' +
                         '<img src="' + thumbUrl + '" class="" draggable="false">' +
                         '</div>');
 
-                    // Append to the slider wrapper
+                    // Add click event to trigger main gallery slide change
+                    $newThumb.on('click', function () {
+                        // Attempt to control the main FlexSlider if it exists
+                        if ($mainGallery.data('flexslider')) {
+                            $mainGallery.flexslider(slideIndex);
+                        } else {
+                            // Fallback or if Bricks uses a different mechanism
+                            console.log('Main gallery FlexSlider instance not found, attempting fallback.');
+                        }
+                    });
+
                     $wrapper.append($newThumb);
                 }
             });
 
-            // Trigger a resize or re-init if possible. 
-            // For FlexSlider:
-            const flex = $bricksSlider.data('flexslider');
-            if (flex) {
-                // Determine how to add slides in FlexSlider properly or just let it be and hope styling picks it up
-                // FlexSlider usually needs valid HTML structure before init.
-                // Since it's already init, we might need to use its API or destroy and re-init.
-                // However, simply appending might work if we trigger a resize.
-
-                // Try simpler approach: Add slides and trigger window resize
-                $(window).trigger('resize');
-            }
+            // Trigger a resize to update layout
+            $(window).trigger('resize');
         }
     });
 });
