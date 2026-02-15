@@ -23,18 +23,35 @@ jQuery(document).ready(function ($) {
                         '<img src="' + thumbUrl + '" class="" draggable="false">' +
                         '</div>');
 
-                    // Add click event to trigger main gallery slide change
-                    $newThumb.on('click', function () {
-                        // Attempt to control the main FlexSlider if it exists
-                        if ($mainGallery.data('flexslider')) {
-                            $mainGallery.flexslider(slideIndex);
-                        } else {
-                            // Fallback or if Bricks uses a different mechanism
-                            console.log('Main gallery FlexSlider instance not found, attempting fallback.');
-                        }
-                    });
+                    const thumbSliderInstance = $bricksSlider.data('flexslider');
 
-                    $wrapper.append($newThumb);
+                    // Try to use FlexSlider API first (Best practice)
+                    if (thumbSliderInstance && typeof thumbSliderInstance.addSlide === 'function') {
+                        // addSlide accepts HTML or Object. It appends by default.
+                        thumbSliderInstance.addSlide($newThumb);
+
+                        // Re-bind click if addSlide doesn't handle asNavFor binding for new slides automatically
+                        // (FlexSlider sometimes needs a nudge or manual binding for dynamic slides)
+                        // We'll add a manual click handler just in case, wrapped to avoid double-binding/conflict
+                        $newThumb.on('click', function (e) {
+                            e.preventDefault();
+                            if ($mainGallery.data('flexslider')) {
+                                // Force sync
+                                $mainGallery.flexslider(slideIndex);
+                            }
+                        });
+                    } else {
+                        // Fallback: Manual appending
+                        $newThumb.on('click', function (e) {
+                            e.preventDefault();
+                            if ($mainGallery.data('flexslider')) {
+                                $mainGallery.flexslider(slideIndex);
+                            } else {
+                                console.log('Main gallery FlexSlider instance not found, attempting fallback.');
+                            }
+                        });
+                        $wrapper.append($newThumb);
+                    }
                 }
             });
 
