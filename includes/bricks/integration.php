@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Register Bricks Elements
  */
-add_action( 'init', function() {
+add_action( 'bricks/register_elements', function() {
     $element_files = [
         __DIR__ . '/elements/product-video-gallery.php',
     ];
@@ -15,7 +15,7 @@ add_action( 'init', function() {
         }
     }
 
-    if ( class_exists( 'Bricks_Product_Video_Gallery' ) ) {
+    if ( class_exists( 'Bricks_Product_Video_Gallery' ) && class_exists( '\Bricks\Elements' ) ) {
         \Bricks\Elements::register_element( new \Bricks_Product_Video_Gallery() );
     }
-}, 11 );
+} );
