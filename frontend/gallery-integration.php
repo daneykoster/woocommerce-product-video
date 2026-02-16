@@ -12,8 +12,8 @@ function wcpv_enqueue_scripts() {
 		return;
 	}
 
-	wp_enqueue_style( 'wcpv-style', WC_PRODUCT_VIDEO_URL . 'assets/css/style.css', array(), '1.0.0' );
-	wp_enqueue_script( 'wcpv-script', WC_PRODUCT_VIDEO_URL . 'assets/js/script.js', array( 'jquery' ), '1.0.0', true );
+	wp_enqueue_style( 'wcpv-style', WC_PRODUCT_VIDEO_URL . 'assets/css/style.css', array(), '1.0.1' );
+	wp_enqueue_script( 'wcpv-script', WC_PRODUCT_VIDEO_URL . 'assets/js/script.js', array( 'jquery' ), '1.0.1', true );
 }
 add_action( 'wp_enqueue_scripts', 'wcpv_enqueue_scripts' );
 
