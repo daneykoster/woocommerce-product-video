@@ -114,5 +114,43 @@ jQuery(document).ready(function ($) {
         attempts++;
         if (attempts > 5) clearInterval(interval);
     }, 1000);
+
+    // Custom Bricks Element Initialization
+    function initBricksCustomElement() {
+        $('.wcpv-product-gallery').each(function () {
+            const $gallery = $(this);
+            const $slider = $gallery.find('.wcpv-main-slider');
+
+            // Check if already initialized by testing for FlexSlider class/data
+            if ($slider.data('flexslider')) return;
+
+            $slider.flexslider({
+                selector: ".slides > li",
+                animation: "slide",
+                controlNav: "thumbnails",
+                directionNav: true,
+                slideshow: false,
+                smoothHeight: true,
+                start: function () {
+                    // Ensure videos are sized correctly
+                    $(window).trigger('resize');
+                }
+            });
+        });
+    }
+
+    // Init on load
+    $(window).on('load', initBricksCustomElement);
+
+    // Mutation observer for Bricks builder canvas changes to re-init if element is added
+    const bricksObserver = new MutationObserver(function (mutations) {
+        initBricksCustomElement();
+    });
+
+    // Observer the body for changes (Bricks execution)
+    const body = document.body;
+    if (body) {
+        bricksObserver.observe(body, { childList: true, subtree: true });
+    }
 });
 

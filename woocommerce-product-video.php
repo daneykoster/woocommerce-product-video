@@ -3,7 +3,8 @@
  * Plugin Name: WooCommerce Product Video
  * Plugin URI:  https://daneykoster.nl
  * Description: Voegt product video's toe aan de WooCommerce product gallery. Werkt met Bricks builder 2.2
- * Version:     1.1.4 * Author:      Daney Koster
+ * Version:     1.1.5
+ * Author:      Daney Koster
  * Text Domain: wc-product-video
  */
 
@@ -27,6 +28,15 @@ function wcpv_admin_enqueue_scripts() {
 	wp_enqueue_script( 'wcpv-admin-script', WC_PRODUCT_VIDEO_URL . 'assets/js/admin-script.js', array( 'jquery', 'jquery-ui-sortable' ), '1.1.2', true );
 	wp_enqueue_style( 'wcpv-admin-style', WC_PRODUCT_VIDEO_URL . 'assets/css/admin.css', array(), '1.1.2' );
 }
+
+// Include Bricks integration
+add_action( 'init', function() {
+    if ( defined( 'BRICKS_VERSION' ) ) {
+        if ( file_exists( WC_PRODUCT_VIDEO_PATH . 'includes/bricks/integration.php' ) ) {
+            require_once WC_PRODUCT_VIDEO_PATH . 'includes/bricks/integration.php';
+        }
+    }
+} );
 
 // Include frontend functionality
 require_once WC_PRODUCT_VIDEO_PATH . 'frontend/gallery-integration.php';
