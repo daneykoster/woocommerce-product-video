@@ -30,7 +30,7 @@ function wcpv_admin_enqueue_scripts() {
 }
 
 // Include Bricks integration
-add_action( 'init', function() {
+add_action( 'after_setup_theme', function() {
     if ( defined( 'BRICKS_VERSION' ) ) {
         if ( file_exists( WC_PRODUCT_VIDEO_PATH . 'includes/bricks/integration.php' ) ) {
             require_once WC_PRODUCT_VIDEO_PATH . 'includes/bricks/integration.php';
