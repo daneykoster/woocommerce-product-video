@@ -45,8 +45,22 @@ jQuery(document).ready(function ($) {
             if ($templateThumb) {
                 // Clone an existing thumbnail to keep classes and structure
                 $newThumb = $templateThumb.clone();
-                // Update image src
-                $newThumb.find('img').attr('src', thumbUrl).attr('srcset', '').attr('data-src', thumbUrl);
+
+                // Update the thumbnail's data-thumb attribute
+                $newThumb.attr('data-thumb', thumbUrl);
+
+                // Clean up the image element completely
+                const $img = $newThumb.find('img');
+                $img.attr('src', thumbUrl);
+                $img.attr('srcset', '');
+                $img.attr('data-src', thumbUrl);
+                $img.attr('data-srcset', '');
+                $img.attr('data-large_image', '');
+                $img.attr('data-sizes', '');
+                $img.removeAttr('width');
+                $img.removeAttr('height');
+                $img.removeClass('bricks-lazy-hidden');
+
                 // Remove active class if present
                 $newThumb.removeClass('flex-active-slide active-slide is-active');
             } else {
