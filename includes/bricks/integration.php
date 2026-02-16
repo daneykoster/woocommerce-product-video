@@ -5,7 +5,7 @@ add_action( 'init', function() {
 
     foreach ( $element_files as $file ) {
         if ( file_exists( $file ) ) {
-            \Bricks\Elements::register_element( $file );
+            \Bricks\Elements::register_element( $file, 'product_video_gallery', 'Bricks_Product_Video_Gallery' );
         }
     }
 }, 11 );
